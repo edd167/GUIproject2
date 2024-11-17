@@ -46,6 +46,33 @@ public class ClientList implements Serializable {
       input.readObject();
     }
   }
+  
+  public boolean removeClient(String clientId) {
+    Iterator<Client> iterator = clients.iterator();
+    while (iterator.hasNext()) {
+        Client client = iterator.next();
+        if (client.getId().equals(clientId)) {
+            iterator.remove();
+            return true; // Client removed successfully
+        }
+    }
+    return false; // Client not found
+}
+
+public boolean editClientDetails(String clientId, String newName, String newAddress) {
+    Client client = search(clientId);
+    if (client != null) {
+        if (newName != null && !newName.trim().isEmpty()) {
+            client.setName(newName); // Assuming Client has setName method
+        }
+        if (newAddress != null && !newAddress.trim().isEmpty()) {
+            client.setAddress(newAddress); // Assuming Client has setAddress method
+        }
+        return true; // Successfully updated
+    }
+    return false; // Client not found
+}
+
 
   public String toString() {
     return clients.toString();

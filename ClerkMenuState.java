@@ -28,6 +28,7 @@ public class ClerkMenuState implements State {
         ImageIcon logoutIcon = new ImageIcon(new ImageIcon("assets/logoutIcon.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
 
         JButton addClientButton = new JButton("Add Client");
+        JButton deleteClientButton = new JButton("Delete Client");
         JButton showProductsButton = new JButton("Product List");
         JButton showClientsButton = new JButton("Client List");
         JButton showClientsWithBalanceButton = new JButton("Balance Due");
@@ -35,7 +36,7 @@ public class ClerkMenuState implements State {
         JButton becomeClientButton = new JButton("Become Client");
         JButton logoutButton = new JButton("Logout", logoutIcon);
 
-        JButton[] buttons = {addClientButton, showProductsButton, showClientsButton, 
+        JButton[] buttons = {addClientButton, deleteClientButton, showProductsButton, showClientsButton, 
                              showClientsWithBalanceButton, recordPaymentButton, becomeClientButton, logoutButton};
 
         for (JButton button : buttons) {
@@ -44,6 +45,7 @@ public class ClerkMenuState implements State {
         }
 
         addClientButton.addActionListener(e -> addClient());
+        deleteClientButton.addActionListener(e ->removeClient());
         showProductsButton.addActionListener(e -> showProducts());
         showClientsButton.addActionListener(e -> showClients());
         showClientsWithBalanceButton.addActionListener(e -> showClientsWithBalance());
@@ -62,6 +64,8 @@ public class ClerkMenuState implements State {
         panel.add(showProductsButton, gbc);
         gbc.gridx = 2;
         panel.add(showClientsButton, gbc);
+        
+
 
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -70,6 +74,10 @@ public class ClerkMenuState implements State {
         panel.add(recordPaymentButton, gbc);
         gbc.gridx = 2;
         panel.add(becomeClientButton, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        panel.add(deleteClientButton, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 2;
@@ -103,6 +111,26 @@ public class ClerkMenuState implements State {
         Warehouse.instance().addClient(name, address, phone);
         JOptionPane.showMessageDialog(context.getFrame(), "Client added.");
     }
+     
+     private void removeClient() {
+    // Prompt for client ID
+    String clientId = JOptionPane.showInputDialog(context.getFrame(), "Enter client ID to delete:");
+    
+    // Validate input
+    if (clientId == null || clientId.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(context.getFrame(), "Client ID cannot be empty.");
+        return;
+    }
+
+    // Attempt to delete client
+    boolean removed = Warehouse.instance().removeClient(clientId);
+    if (removed) {
+        JOptionPane.showMessageDialog(context.getFrame(), "Client removed successfully.");
+    } else {
+        JOptionPane.showMessageDialog(context.getFrame(), "Client ID not found.");
+    }
+}
+
 
     private void showProducts() {
         StringBuilder productList = new StringBuilder("<html><div style='font-size:14px;'><b>Products:</b><br>");
